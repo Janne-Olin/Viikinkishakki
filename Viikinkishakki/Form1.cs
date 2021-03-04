@@ -53,10 +53,11 @@ namespace Viikinkishakki
                 for (int j = 0; j < boxGrid.GetLength(1); j++)
                 {
                     PictureBox pbox = new PictureBox();
-                    pbox.Location = new Point(i * 40 + 10, j * 40 + 10);
-                    pbox.Size = new Size(40, 40);
+                    pbox.Location = new Point(i * 60 + 10, j * 60 + 40);
+                    pbox.Size = new Size(60, 60);
 
                     pbox.BorderStyle = BorderStyle.Fixed3D;
+                    pbox.SizeMode = PictureBoxSizeMode.StretchImage;
 
                     this.Controls.Add(pbox);
                     boxGrid[i, j] = pbox;
@@ -64,8 +65,16 @@ namespace Viikinkishakki
                     pbox.Click += new EventHandler(pictureBox_Click);
                 }
             }
-
         }
 
+        private void toolStripMenuItemNewGame_Click(object sender, EventArgs e)
+        {
+            game.NewGame();
+        }
+
+        private void toolStripMenuItemExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

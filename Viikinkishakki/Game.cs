@@ -90,17 +90,21 @@ namespace Viikinkishakki
 
                 if (piece is AttPiece)
                 {
-                    PBoxGrid.Grid[x, y].BackColor = Color.Brown;
+                    //PBoxGrid.Grid[x, y].BackColor = Color.Brown;
+                    PBoxGrid.Grid[x, y].Image = Image.FromFile("attPawn.png");
+
                 }
                 else if (piece is DefPiece)
                 {
                     if (piece != King)
                     {
-                        PBoxGrid.Grid[x, y].BackColor = Color.Orange;
+                        //PBoxGrid.Grid[x, y].BackColor = Color.Orange;
+                        PBoxGrid.Grid[x, y].Image = Image.FromFile("defPawn.png");
                     }
                     else
                     {
-                        PBoxGrid.Grid[x, y].BackColor = Color.Gold;
+                        //PBoxGrid.Grid[x, y].BackColor = Color.Gold;
+                        PBoxGrid.Grid[x, y].Image = Image.FromFile("king.png");
                     }
                 }
 
@@ -132,7 +136,7 @@ namespace Viikinkishakki
                 if (piece.XPos == x && piece.YPos == y)
                 {
                     Selected = piece;
-                    PBoxGrid.Grid[x, y].BackColor = Color.Blue;
+                    PBoxGrid.Grid[x, y].BackColor = Color.LightBlue;
                     break;
                 }
             }
@@ -144,6 +148,7 @@ namespace Viikinkishakki
             {
                 // Poistetaan valittu nappula alkuperäisestä sijainnista
                 PBoxGrid.Grid[Selected.XPos, Selected.YPos].BackColor = Control.DefaultBackColor;
+                PBoxGrid.Grid[Selected.XPos, Selected.YPos].Image = null;
 
                 // Päivitetään valitun nappulan sijainti
                 Selected.XPos = x;
@@ -189,7 +194,7 @@ namespace Viikinkishakki
                 {
                     for (int i = Selected.XPos - 1; i >= x ; i--)
                     {
-                        if (PBoxGrid.Grid[i, y].BackColor != Control.DefaultBackColor)
+                        if (PBoxGrid.Grid[i, y].BackColor != Control.DefaultBackColor || PBoxGrid.Grid[i, y].Image != null)
                         {
                             if (PBoxGrid.Grid[i, y].BackColor == Color.DarkSlateGray)
                             {
@@ -205,7 +210,7 @@ namespace Viikinkishakki
                 {
                     for (int i = Selected.XPos + 1; i <= x; i++)
                     {
-                        if (PBoxGrid.Grid[i, y].BackColor != Control.DefaultBackColor)
+                        if (PBoxGrid.Grid[i, y].BackColor != Control.DefaultBackColor || PBoxGrid.Grid[i, y].Image != null)
                         {
                             if (PBoxGrid.Grid[i, y].BackColor == Color.DarkSlateGray)
                             {
@@ -225,7 +230,7 @@ namespace Viikinkishakki
                 {
                     for (int i = Selected.YPos - 1; i >= y; i--)
                     {
-                        if (PBoxGrid.Grid[x, i].BackColor != Control.DefaultBackColor)
+                        if (PBoxGrid.Grid[x, i].BackColor != Control.DefaultBackColor || PBoxGrid.Grid[x, i].Image != null)
                         {
                             if (PBoxGrid.Grid[x, i].BackColor == Color.DarkSlateGray)
                             {
@@ -241,7 +246,7 @@ namespace Viikinkishakki
                 {
                     for (int i = Selected.YPos + 1; i <= y; i++)
                     {
-                        if (PBoxGrid.Grid[x, i].BackColor != Control.DefaultBackColor)
+                        if (PBoxGrid.Grid[x, i].BackColor != Control.DefaultBackColor || PBoxGrid.Grid[x, i].Image != null)
                         {
                             if (PBoxGrid.Grid[x, i].BackColor == Color.DarkSlateGray)
                             {
@@ -421,7 +426,8 @@ namespace Viikinkishakki
             foreach (Piece piece in deleteThese)
             {
                 // Poistetaan kaikki syödyt nappulat
-                PBoxGrid.Grid[piece.XPos, piece.YPos].BackColor = Control.DefaultBackColor;
+                //PBoxGrid.Grid[piece.XPos, piece.YPos].BackColor = Control.DefaultBackColor;
+                PBoxGrid.Grid[piece.XPos, piece.YPos].Image = null;
                 Pieces.Remove(piece);
 
                 if (piece == King)
@@ -444,14 +450,20 @@ namespace Viikinkishakki
             result = MessageBox.Show(message, caption, buttons);
             if (result == DialogResult.OK)
             {
-                // Aloittaa pelin alusta
-                foreach (PictureBox box in PBoxGrid.Grid)
-                {
-                    box.BackColor = Control.DefaultBackColor;
-                }
-
-                CreatePieces();
+                NewGame();
             }
+        }
+
+        public void NewGame()
+        {
+            // Aloittaa pelin alusta
+            foreach (PictureBox box in PBoxGrid.Grid)
+            {
+                box.BackColor = Control.DefaultBackColor;
+                box.Image = null;
+            }
+
+            CreatePieces();
         }
     }
 }
