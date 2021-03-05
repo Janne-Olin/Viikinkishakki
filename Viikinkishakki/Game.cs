@@ -82,6 +82,12 @@ namespace Viikinkishakki
 
         private void AddToBoard()
         {
+            
+            string path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+            string mainpath = path.Replace("\\bin\\Debug\\netcoreapp3.1", "");
+            mainpath = mainpath.Replace("file:\\", "");
+            
+
             // Asetetaan nappulat paikoilleen ja asetetaan niille oikeat värit
             foreach (Piece piece in Pieces)
             {
@@ -91,7 +97,7 @@ namespace Viikinkishakki
                 if (piece is AttPiece)
                 {
                     //PBoxGrid.Grid[x, y].BackColor = Color.Brown;
-                    PBoxGrid.Grid[x, y].Image = Image.FromFile("attPawn.png");
+                    PBoxGrid.Grid[x, y].Image = Image.FromFile(mainpath + "\\icons\\attPawn.png");
 
                 }
                 else if (piece is DefPiece)
@@ -99,12 +105,12 @@ namespace Viikinkishakki
                     if (piece != King)
                     {
                         //PBoxGrid.Grid[x, y].BackColor = Color.Orange;
-                        PBoxGrid.Grid[x, y].Image = Image.FromFile("defPawn.png");
+                        PBoxGrid.Grid[x, y].Image = Image.FromFile(mainpath + "\\icons\\defPawn.png");
                     }
                     else
                     {
                         //PBoxGrid.Grid[x, y].BackColor = Color.Gold;
-                        PBoxGrid.Grid[x, y].Image = Image.FromFile("king.png");
+                        PBoxGrid.Grid[x, y].Image = Image.FromFile(mainpath + "\\icons\\king.png");
                     }
                 }
 
