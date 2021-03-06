@@ -188,7 +188,16 @@ namespace Viikinkishakki
             {
                 // Poistetaan valittu nappula alkuperäisestä sijainnista
                 PBoxGrid.Grid[Selected.XPos, Selected.YPos].Image = null;
-                PBoxGrid.Grid[Selected.XPos, Selected.YPos].Tag = "empty";
+                
+                if (Selected.XPos == 5 && Selected.YPos == 5)
+                {
+                    // Ei anneta linnalle "empty"-tagia kuninkaan poistuessa
+                    PBoxGrid.Grid[Selected.XPos, Selected.YPos].Tag = "special";
+                }
+                else
+                {
+                    PBoxGrid.Grid[Selected.XPos, Selected.YPos].Tag = "empty";
+                }
 
                 // Päivitetään valitun nappulan sijainti
                 Selected.XPos = x;
