@@ -10,6 +10,10 @@ namespace Viikinkishakki
         {
             XPos = x;
             YPos = y;
+            IconPath = "\\icons\\attPawn.png";
+            SelectedIconPath = "\\icons\\attPawnSelected.png";
+            Tag = "attPiece";
+
         }
     }
 }

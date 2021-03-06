@@ -11,6 +11,7 @@ namespace Viikinkishakki
         {
             XPos = x;
             YPos = y;
+            Tag = "special";
         }
     }
 }

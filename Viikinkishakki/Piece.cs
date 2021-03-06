@@ -8,5 +8,8 @@ namespace Viikinkishakki
     {
         public int XPos { get; set; }
         public int YPos { get; set; }
+        public string IconPath { get; set; }
+        public string SelectedIconPath { get; set; }
+        public string Tag { get; set; }
     }
 }

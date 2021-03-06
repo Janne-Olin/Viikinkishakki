@@ -10,6 +10,9 @@ namespace Viikinkishakki
         {
             XPos = x;
             YPos = y;
+            IconPath = "\\icons\\defPawn.png";
+            SelectedIconPath = "\\icons\\defPawnSelected.png";
+            Tag = "defPiece";
         }
     }
 }
