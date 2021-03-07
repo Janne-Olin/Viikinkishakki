@@ -20,6 +20,7 @@ namespace Viikinkishakki
         public King King { get; set; }
         public String Path { get; set; }
         public String MainPath { get; set; }
+        public Boolean Animating { get; set; } = false;
 
         public Game()
         {
@@ -104,42 +105,18 @@ namespace Viikinkishakki
                 {
                     PBoxGrid.Grid[x, y].Image = Image.FromFile(MainPath + piece.IconPath);
                 }
-
-/*
-                if (piece is AttPiece)
-                {
-                    //PBoxGrid.Grid[x, y].BackColor = Color.Brown;
-                    PBoxGrid.Grid[x, y].Image = Image.FromFile(MainPath + "\\icons\\attPawn.png");
-                    PBoxGrid.Grid[x, y].Tag = "attPiece";
-
-                }
-                else if (piece is DefPiece)
-                {
-                    if (piece != King)
-                    {
-                        //PBoxGrid.Grid[x, y].BackColor = Color.Orange;
-                        PBoxGrid.Grid[x, y].Image = Image.FromFile(MainPath + "\\icons\\defPawn.png");
-                        PBoxGrid.Grid[x, y].Tag = "defPiece";
-                    }
-                    else
-                    {
-                        //PBoxGrid.Grid[x, y].BackColor = Color.Gold;
-                        PBoxGrid.Grid[x, y].Image = Image.FromFile(MainPath + "\\icons\\king.png");
-                        PBoxGrid.Grid[x, y].Tag = "king";
-                    }
-                }
-
-                else if (piece is Special)
-                {
-                    PBoxGrid.Grid[x, y].Tag = "special";
-                }
-*/
             }
 
         }
 
         public void BoardClicked(int x, int y)
         {  
+            // Ei tehdä mitään animaation aikana
+            if (Animating)
+            {
+                return;
+            }
+
             // Tarkastetaanko onko nappulaa valittuna
             if (Selected != null)
             {
@@ -185,10 +162,7 @@ namespace Viikinkishakki
         private void MakeMove(int x, int y)
         {
             if (MoveIsLegal(x, y))
-            {
-                // Poistetaan valittu nappula alkuperäisestä sijainnista
-                PBoxGrid.Grid[Selected.XPos, Selected.YPos].Image = null;
-                
+            {                
                 if (Selected.XPos == 5 && Selected.YPos == 5)
                 {
                     // Ei anneta linnalle "empty"-tagia kuninkaan poistuessa
@@ -199,10 +173,11 @@ namespace Viikinkishakki
                     PBoxGrid.Grid[Selected.XPos, Selected.YPos].Tag = "empty";
                 }
 
-                // Päivitetään valitun nappulan sijainti
+                Animate(x, y);
+
+                // Päivitetään valitun nappulan sijainti                
                 Selected.XPos = x;
                 Selected.YPos = y;
-                PBoxGrid.Grid[Selected.XPos, Selected.YPos].Image = Image.FromFile(MainPath + Selected.IconPath);
                 PBoxGrid.Grid[Selected.XPos, Selected.YPos].Tag = Selected.Tag;
 
                 CheckCaptures();
@@ -216,8 +191,6 @@ namespace Viikinkishakki
                         GameEnd("Puolustaja");
                     }
                 }
-
-                Selected = null;
             }
         }
 
@@ -288,6 +261,56 @@ namespace Viikinkishakki
             }
 
             return true;
+        }
+
+        private void Animate(int x, int y)
+        {
+            Animating = true;
+            PictureBox pbox = PBoxGrid.Grid[Selected.XPos, Selected.YPos];
+            Point origPboxLoc = new Point(pbox.Location.X, pbox.Location.Y);
+            pbox.BringToFront();            
+
+
+            Timer timer = new Timer();
+            timer.Enabled = true;
+            timer.Interval = 20;
+            timer.Tick += (object sender, EventArgs e) => timer_Tick(sender, e, x, y, pbox, origPboxLoc);
+        }
+
+        void timer_Tick(object sender, EventArgs e, int x, int y, PictureBox pbox, Point OrigPboxLoc)
+        {
+            int curX = pbox.Location.X;
+            int curY = pbox.Location.Y;
+            int targetX = PBoxGrid.Grid[x, y].Location.X;
+            int targetY = PBoxGrid.Grid[x, y].Location.Y;
+
+            if (targetX > curX)
+            {
+                pbox.Location = new Point(curX + 70, curY);
+            }
+            else if (targetX < curX)
+            {
+                pbox.Location = new Point(curX - 70, curY);
+            }
+            else if (targetY > curY)
+            {
+                pbox.Location = new Point(curX, curY + 70);
+            }
+            else if (targetY < curY)
+            {
+                pbox.Location = new Point(curX, curY - 70);
+            }
+            else
+            {
+                // Poistetaan valittu nappula alkuperäisestä sijainnista
+                pbox.Image = null;
+
+                pbox.Location = OrigPboxLoc;
+                PBoxGrid.Grid[Selected.XPos, Selected.YPos].Image = Image.FromFile(MainPath + Selected.IconPath);
+                Selected = null;
+                ((Timer)sender).Stop();
+                Animating = false;
+            }
         }
 
         /// <summary>

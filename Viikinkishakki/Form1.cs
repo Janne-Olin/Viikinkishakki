@@ -60,9 +60,12 @@ namespace Viikinkishakki
             pboxBoard.SizeMode = PictureBoxSizeMode.StretchImage;
             pboxBoard.Image = Image.FromFile(mainPath + "\\icons\\board.png");
             pboxBoard.BringToFront();
-            pboxBoard.Visible = true;
+            pboxBoard.Visible = true;            
 
             splitContainer1.Panel2.Controls.Add(pboxBoard);
+
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         private void CreateGrid()
@@ -97,6 +100,11 @@ namespace Viikinkishakki
         private void toolStripMenuItemExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 }
