@@ -93,7 +93,7 @@ namespace Viikinkishakki
             MainPath = MainPath.Replace("file:\\", "");
             
 
-            // Asetetaan nappulat paikoilleen ja asetetaan niille oikeat värit
+            // Asetetaan nappulat paikoilleen ja asetetaan niille kuvakkeet
             foreach (Piece piece in Pieces)
             {
                 int x = piece.XPos;
@@ -519,6 +519,8 @@ namespace Viikinkishakki
                 box.Image = null;
                 box.Tag = "empty";
             }
+
+            Selected = null;
 
             CreatePieces();
         }
